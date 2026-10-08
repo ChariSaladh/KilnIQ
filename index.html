@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KilnIQ | Operations system for lime plants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F4EF;--surface:#FFFFFF;--ink:#1E2A31;--muted:#566670;--line:#D5DAD2;
+  --lime:#7FB414;--on-lime:#14200A;--ember:#D9480F;--on-ember:#FFFFFF;--slate:#26323A;--on-slate:#EAF0E6;--chip:#E6EBE2;
+  --head:"Bricolage Grotesque","Trebuchet MS",Arial,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#12181C;--surface:#1B2329;--ink:#E9EEE7;--muted:#9AA8AF;--line:#2E3A41;--lime:#A3D13A;--ember:#FF7A3D;--on-ember:#1A1000;--slate:#0D1114;--chip:#252F36}
+}
+:root[data-theme="dark"]{--bg:#12181C;--surface:#1B2329;--ink:#E9EEE7;--muted:#9AA8AF;--line:#2E3A41;--lime:#A3D13A;--ember:#FF7A3D;--on-ember:#1A1000;--slate:#0D1114;--chip:#252F36}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ember);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+header{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:800;font-size:24px;text-decoration:none;letter-spacing:-.02em}
+nav{display:flex;align-items:center;gap:28px;font-weight:500}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+.btn{display:inline-block;font-family:var(--body);font-weight:600;font-size:16px;padding:13px 22px;border-radius:6px;text-decoration:none;border:2px solid var(--ink);color:var(--ink);background:transparent}
+.btn.primary{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.small{padding:8px 16px;font-size:15px}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:56px 0 80px}
+h1{font-family:var(--head);font-weight:800;font-size:clamp(38px,5.4vw,64px);line-height:1.04;letter-spacing:-.03em;margin:0 0 22px}
+.lede{font-size:19px;color:var(--muted);max-width:30em;margin:0 0 30px}
+.actions{display:flex;gap:14px;flex-wrap:wrap}
+.plant{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+.plant svg{display:block;width:100%;height:auto}
+.s-line{stroke:var(--line)}
+.s-ink{fill:none;stroke:var(--ink);stroke-width:2.5}
+.f-stone{fill:var(--chip)}
+.f-kiln{fill:var(--slate)}
+.f-ember{fill:var(--ember)}
+.f-lime{fill:var(--lime)}
+.t-label{font:600 12px var(--body);fill:var(--muted)}
+.truck{animation:drive 9s linear infinite}
+@keyframes drive{0%{transform:translateX(-90px)}100%{transform:translateX(560px)}}
+.glow{animation:flicker 2.6s ease-in-out infinite}
+@keyframes flicker{50%{opacity:.55}}
+section{padding:72px 0;border-top:1px solid var(--line)}
+h2{font-family:var(--head);font-weight:700;font-size:clamp(28px,3.6vw,42px);line-height:1.1;letter-spacing:-.02em;margin:0 0 16px}
+.split{display:grid;grid-template-columns:1fr 1.4fr;gap:56px}
+.split>p{color:var(--muted);max-width:26em;margin:0}
+.rows{display:grid;gap:0}
+.row{padding:22px 0;border-bottom:1px solid var(--line)}
+.row:first-child{padding-top:0}
+.row h3{font-family:var(--head);font-size:22px;margin:0 0 6px;letter-spacing:-.01em}
+.row p{margin:0;color:var(--muted)}
+.dash{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:32px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{border-left:4px solid var(--lime);padding:2px 0 2px 14px}
+.kpi.warm{border-color:var(--ember)}
+.kpi b{display:block;font-family:var(--head);font-size:28px;line-height:1.1}
+.kpi span{font-size:14px;color:var(--muted)}
+.panels{display:grid;grid-template-columns:1.3fr 1fr;gap:24px}
+.panel h4{font-family:var(--head);font-size:17px;margin:0 0 10px}
+.scroll{overflow-x:auto;max-width:100%}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:340px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:14px}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:13px;font-weight:600;background:var(--chip)}
+.chip.in{background:var(--lime);color:var(--on-lime)}
+.chip.out{background:var(--ember);color:var(--on-ember)}
+.legend{display:flex;gap:18px;font-size:14px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.roles{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.roles span{padding:8px 16px;border:1px solid var(--line);border-radius:6px;background:var(--surface);font-weight:500}
+.cta{background:var(--slate);color:var(--on-slate);border-radius:18px;padding:56px 40px;margin:72px 0 48px}
+.cta h2{margin-bottom:12px}
+.cta p{margin:0 0 26px;color:#B6C3BC;max-width:34em}
+.cta .btn{border-color:var(--on-slate);color:var(--on-slate)}
+.cta .btn.primary{border-color:var(--lime);color:var(--on-lime)}
+footer{padding:0 0 40px;color:var(--muted);font-size:15px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+@media (max-width:860px){
+  .hero,.split,.panels{grid-template-columns:1fr}
+  .hero{padding-top:28px}
+  .kpis{grid-template-columns:1fr 1fr}
+  nav a:not(.btn){display:none}
+  .cta{padding:40px 24px}
+}
+@media (prefers-reduced-motion:reduce){.truck,.glow{animation:none}.truck{transform:translateX(300px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="brand" href="#top" aria-label="KilnIQ home">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M7 27V13Q7 3 15 3t8 10v14z" fill="var(--slate)"/><path d="M11 27v-6q0-5 4-5t4 5v6z" fill="var(--ember)"/></svg>
+      KilnIQ
+    </a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#contact">Contact</a>
+      <a class="btn small" href="#contact">Sign in</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div>
+        <h1>See every tonne and every truck, from quarry to customer.</h1>
+        <p class="lede">KilnIQ is the operations system for lime plants. It tracks production, site activity, transport, and profit in one place, so managers stop chasing paper logs.</p>
+        <div class="actions">
+          <a class="btn primary" href="#contact">Request a demo</a>
+          <a class="btn" href="#dashboard">See the dashboard</a>
+        </div>
+      </div>
+      <div class="plant" role="img" aria-label="Diagram of a lime plant: limestone goes into the kiln, quicklime is stored in a silo, and trucks carry it away along the road.">
+        <svg viewBox="0 0 520 330">
+          <line x1="0" y1="262" x2="520" y2="262" class="s-line" stroke-width="2"/>
+          <path d="M20 262l20-34 34 8 18 26z" class="f-stone s-ink"/>
+          <path d="M52 262l14-22 26 6 12 16z" class="f-stone s-ink"/>
+          <text x="22" y="290" class="t-label">Limestone</text>
+          <path d="M170 262V120L205 56h70l35 64v142z" class="f-kiln"/>
+          <rect x="214" y="196" width="52" height="66" rx="26" class="f-ember glow"/>
+          <rect x="226" y="30" width="28" height="26" class="f-kiln"/>
+          <text x="196" y="290" class="t-label">Kiln</text>
+          <rect x="360" y="110" width="76" height="152" rx="6" class="f-stone s-ink"/>
+          <rect x="360" y="110" width="76" height="22" rx="6" class="f-lime"/>
+          <rect x="386" y="262" width="24" height="0" />
+          <text x="368" y="290" class="t-label">Lime silo</text>
+          <path d="M100 250H168" class="s-ink" stroke-dasharray="6 6"/>
+          <path d="M312 232H358" class="s-ink" stroke-dasharray="6 6"/>
+          <g class="truck">
+            <rect x="0" y="226" width="54" height="28" rx="3" fill="var(--slate)"/>
+            <path d="M54 234h18l10 10v10H54z" fill="var(--lime)"/>
+            <circle cx="14" cy="258" r="7" fill="var(--ink)"/><circle cx="44" cy="258" r="7" fill="var(--ink)"/><circle cx="72" cy="258" r="7" fill="var(--ink)"/>
+          </g>
+          <text x="436" y="316" class="t-label" text-anchor="end">Dispatch</text>
+        </svg>
+      </div>
+    </div>
+  </main>
+
+  <section id="features">
+    <div class="split">
+      <div>
+        <h2>One record for everything that happens on site</h2>
+        <p>Every entry is made once, where the work happens. Production, transport, and finance read from the same data.</p>
+      </div>
+      <div class="rows">
+        <div class="row"><h3>Production</h3><p>Log limestone received, kiln batches, quicklime and hydrated lime output, and live stock levels.</p></div>
+        <div class="row"><h3>Trucks and weighbridge</h3><p>Check vehicles in and out, record gross and tare weights, drivers, destinations, and delivery status.</p></div>
+        <div class="row"><h3>Site activity</h3><p>Keep shift logs, maintenance jobs, fuel and coal use, and safety incidents in a searchable timeline.</p></div>
+        <div class="row"><h3>Profit and income</h3><p>Filter sales and costs by product, customer, truck, or date, and click through any chart to the records behind it.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dashboard">
+    <h2>A dashboard your whole team can read</h2>
+    <p style="color:var(--muted);max-width:36em;margin:0">Sample data shown. Charts respond to filters, the way you expect from a business intelligence tool.</p>
+    <div class="dash">
+      <div class="kpis">
+        <div class="kpi"><b>186 t</b><span>Lime produced today</span></div>
+        <div class="kpi"><b>14</b><span>Trucks on site now</span></div>
+        <div class="kpi"><b>312 t</b><span>Stock in silos</span></div>
+        <div class="kpi warm"><b>31%</b><span>Profit margin this month</span></div>
+      </div>
+      <div class="panels">
+        <div class="panel">
+          <h4>Produced and dispatched, last 7 days (tonnes)</h4>
+          <svg viewBox="0 0 440 190" width="100%" role="img" aria-label="Bar chart comparing tonnes produced and dispatched for each of the last seven days.">
+            <g stroke="var(--line)"><line x1="30" y1="20" x2="440" y2="20"/><line x1="30" y1="70" x2="440" y2="70"/><line x1="30" y1="120" x2="440" y2="120"/><line x1="30" y1="170" x2="440" y2="170"/></g>
+            <g class="t-label"><text x="0" y="174">0</text><text x="0" y="124">100</text><text x="0" y="74">200</text><text x="0" y="24">300</text></g>
+            <g fill="var(--lime)">
+              <rect x="42" y="62" width="17" height="108"/><rect x="100" y="48" width="17" height="122"/><rect x="158" y="70" width="17" height="100"/><rect x="216" y="40" width="17" height="130"/><rect x="274" y="56" width="17" height="114"/><rect x="332" y="36" width="17" height="134"/><rect x="390" y="44" width="17" height="126"/>
+            </g>
+            <g fill="var(--ember)">
+              <rect x="61" y="78" width="17" height="92"/><rect x="119" y="64" width="17" height="106"/><rect x="177" y="76" width="17" height="94"/><rect x="235" y="58" width="17" height="112"/><rect x="293" y="70" width="17" height="100"/><rect x="351" y="52" width="17" height="118"/><rect x="409" y="60" width="17" height="110"/>
+            </g>
+            <g class="t-label" text-anchor="middle"><text x="60" y="186">Mon</text><text x="118" y="186">Tue</text><text x="176" y="186">Wed</text><text x="234" y="186">Thu</text><text x="292" y="186">Fri</text><text x="350" y="186">Sat</text><text x="408" y="186">Sun</text></g>
+          </svg>
+          <div class="legend"><span><i style="background:var(--lime)"></i>Produced</span><span><i style="background:var(--ember)"></i>Dispatched</span></div>
+        </div>
+        <div class="panel">
+          <h4>Gate activity</h4>
+          <div class="scroll">
+          <table>
+            <thead><tr><th>Vehicle</th><th>Load</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>KDA 214X</td><td>28.4 t</td><td><span class="chip in">On site</span></td></tr>
+              <tr><td>KCB 880T</td><td>31.0 t</td><td><span class="chip out">Departed</span></td></tr>
+              <tr><td>KDG 105M</td><td>26.7 t</td><td><span class="chip in">On site</span></td></tr>
+              <tr><td>KCZ 342P</td><td>29.9 t</td><td><span class="chip">Weighing</span></td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="split">
+      <div>
+        <h2>The right view for each role</h2>
+        <p>People see what they need to do their job, and nothing they should not edit.</p>
+      </div>
+      <div>
+        <p style="margin:0;color:var(--muted)">Sign-in is role based. Gate clerks record trucks, supervisors record production, and managers review reports and finance.</p>
+        <div class="roles"><span>Admin</span><span>Manager</span><span>Weighbridge clerk</span><span>Production supervisor</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta" id="contact">
+    <h2>Run your plant with facts, not guesses</h2>
+    <p>Tell us about your plant and we will set up a walkthrough of KilnIQ with your own products and trucks.</p>
+    <a class="btn primary" href="mailto:hello@kiliniq.org">Request a demo</a>
+  </div>
+
+  <footer>
+    <span>KilnIQ, the operations system for lime plants.</span>
+    <span>hello@kiliniq.org</span>
+  </footer>
+</div>
+</body>
+</html>
